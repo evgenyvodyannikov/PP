@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Payment" Relationship="Self.FK__Payment__CattID__44FF419A" FromRole="Category" ToRole="Payment" />
+  </EntityType>
+  <EntityType Name="Client">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Login" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Payment" Relationship="Self.Client_Payment" FromRole="Client" ToRole="Payment" />
+  </EntityType>
+  <EntityType Name="Destination">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Payment" Relationship="Self.FK__Payment__Destina__45F365D3" FromRole="Destination" ToRole="Payment" />
+  </EntityType>
+  <EntityType Name="Payment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Count" Type="Int32" Nullable="false" />
+    <Property Name="Cost" Type="Int32" Nullable="false" />
+    <Property Name="CattID" Type="Int32" Nullable="false" />
+    <Property Name="Destination" Type="Int32" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="Category" Relationship="Self.FK__Payment__CattID__44FF419A" FromRole="Payment" ToRole="Category" />
+    <NavigationProperty Name="Destination1" Relationship="Self.FK__Payment__Destina__45F365D3" FromRole="Payment" ToRole="Destination" />
+    <NavigationProperty Name="Client" Relationship="Self.Client_Payment" FromRole="Payment" ToRole="Client" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK__Payment__CattID__44FF419A">
+    <End Role="Category" Type="Self.Category" Multiplicity="1" />
+    <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Payment">
+        <PropertyRef Name="CattID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Payment__Destina__45F365D3">
+    <End Role="Destination" Type="Self.Destination" Multiplicity="1" />
+    <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Destination">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Payment">
+        <PropertyRef Name="Destination" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Client_Payment">
+    <End Role="Client" Type="Self.Client" Multiplicity="*" />
+    <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Category" EntityType="Self.Category" />
+    <EntitySet Name="Client" EntityType="Self.Client" />
+    <EntitySet Name="Destination" EntityType="Self.Destination" />
+    <EntitySet Name="Payment" EntityType="Self.Payment" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK__Payment__CattID__44FF419A" Association="Self.FK__Payment__CattID__44FF419A">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Payment" EntitySet="Payment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Payment__Destina__45F365D3" Association="Self.FK__Payment__Destina__45F365D3">
+      <End Role="Destination" EntitySet="Destination" />
+      <End Role="Payment" EntitySet="Payment" />
+    </AssociationSet>
+    <AssociationSet Name="Client_Payment" Association="Self.Client_Payment">
+      <End Role="Client" EntitySet="Client" />
+      <End Role="Payment" EntitySet="Payment" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

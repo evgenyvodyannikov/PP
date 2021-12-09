@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Client">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="varchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="varchar(max)" Nullable="false" />
+    <Property Name="Login" Type="varchar(max)" Nullable="false" />
+    <Property Name="Password" Type="varchar(max)" Nullable="false" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "pr1-22-vodyannikoves_ISRPO.dbo.Client_Payment" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+  <EntityType Name="Client_Payment">
+    <Key>
+      <PropertyRef Name="ClientID" />
+      <PropertyRef Name="PaymentID" />
+    </Key>
+    <Property Name="ClientID" Type="int" Nullable="false" />
+    <Property Name="PaymentID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Destination">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Payment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar(max)" Nullable="false" />
+    <Property Name="Count" Type="int" Nullable="false" />
+    <Property Name="Cost" Type="int" Nullable="false" />
+    <Property Name="CattID" Type="int" Nullable="false" />
+    <Property Name="Destination" Type="int" Nullable="false" />
+    <Property Name="Date" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK__Client_Pa__Clien__47DBAE45">
+    <End Role="Client" Type="Self.Client" Multiplicity="1" />
+    <End Role="Client_Payment" Type="Self.Client_Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Client_Payment">
+        <PropertyRef Name="ClientID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Client_Pa__Payme__48CFD27E">
+    <End Role="Payment" Type="Self.Payment" Multiplicity="1" />
+    <End Role="Client_Payment" Type="Self.Client_Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Payment">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Client_Payment">
+        <PropertyRef Name="PaymentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Payment__CattID__44FF419A">
+    <End Role="Category" Type="Self.Category" Multiplicity="1" />
+    <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Payment">
+        <PropertyRef Name="CattID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Payment__Destina__45F365D3">
+    <End Role="Destination" Type="Self.Destination" Multiplicity="1" />
+    <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Destination">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Payment">
+        <PropertyRef Name="Destination" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище ModelContainer">
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Destination" EntityType="Self.Destination" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Client_Payment" EntityType="Self.Client_Payment" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Client_Payment].[ClientID] AS [ClientID], 
+    [Client_Payment].[PaymentID] AS [PaymentID]
+    FROM [dbo].[Client_Payment] AS [Client_Payment]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__Client_Pa__Clien__47DBAE45" Association="Self.FK__Client_Pa__Clien__47DBAE45">
+      <End Role="Client" EntitySet="Client" />
+      <End Role="Client_Payment" EntitySet="Client_Payment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Client_Pa__Payme__48CFD27E" Association="Self.FK__Client_Pa__Payme__48CFD27E">
+      <End Role="Payment" EntitySet="Payment" />
+      <End Role="Client_Payment" EntitySet="Client_Payment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Payment__CattID__44FF419A" Association="Self.FK__Payment__CattID__44FF419A">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Payment" EntitySet="Payment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Payment__Destina__45F365D3" Association="Self.FK__Payment__Destina__45F365D3">
+      <End Role="Destination" EntitySet="Destination" />
+      <End Role="Payment" EntitySet="Payment" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
